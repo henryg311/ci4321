@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Triangle</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <script type="module">
+    // Importa Three.js
+    import * as THREE from 'https://unpkg.com/three@0.154.0/build/three.module.js';
+
+    // Crear la escena y la cámara
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x2c2f3f); // Fondo oscuro (no negro)
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    // Crear el renderizador
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Crear los vértices del triángulo equilátero
+    const geometry = new THREE.BufferGeometry();
+    const height = Math.sqrt(3) / 2; // Altura del triángulo equilátero
+    const vertices = new Float32Array([
+      0.0, height, 0.0, // Vértice superior
+     -0.5, 0.0, 0.0,    // Vértice inferior izquierdo
+      0.5, 0.0, 0.0     // Vértice inferior derecho
+    ]);
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+    // Asignar colores a cada vértice
+    const colors = new Float32Array([
+      1.0, 0.0, 0.0, // Rojo para el vértice superior
+      0.0, 1.0, 0.0, // Verde para el vértice inferior izquierdo
+      0.0, 0.0, 1.0  // Azul para el vértice inferior derecho
+    ]);
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    // Crear el material con colores de los vértices
+    const material = new THREE.MeshBasicMaterial({ vertexColors: true });
+
+    // Crear el triángulo y añadirlo a la escena
+    const triangle = new THREE.Mesh(geometry, material);
+    scene.add(triangle);
+
+    // Posicionar la cámara
+    camera.position.z = 3;
+
+    // Crear la función de animación
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+
+    // Iniciar la animación
+    animate();
+  </script>
+</body>
+</html>
