@@ -37,12 +37,12 @@ Esta implementación utiliza **OpenGL** y **GLFW** para renderizar un triángulo
 
 3. Ejecuta los siguientes comandos para compilar y ejecutar el proyecto:
 
-    ####mkdir build
-    ####cd build
-    ####cmake ..
-    ####cmake --build .
-    ####cd debug
-    ####OpenGLProject
+    #### mkdir build
+    #### cd build
+    #### cmake ..
+    #### cmake --build .
+    #### cd debug
+    #### OpenGLProject
 
 
 #### Archivos relevantes
