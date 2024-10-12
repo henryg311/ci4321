@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triángulo Equilátero con WebGL2</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glCanvas"></canvas>
+
+    <script>
+        // Inicialización de WebGL
+        const canvas = document.getElementById('glCanvas');
+        const gl = canvas.getContext('webgl2');
+        
+        if (!gl) {
+            console.log("WebGL2 no está disponible.");
+        }
+
+        // Ajustar el tamaño del canvas para ocupar toda la pantalla
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Definir los shaders de vértices y fragmentos
+        const vertexShaderSource = `#version 300 es
+        in vec2 aPosition;
+        in vec3 aColor;
+        out vec3 vColor;
+        
+        void main() {
+            vColor = aColor;
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+        }`;
+
+        const fragmentShaderSource = `#version 300 es
+        precision mediump float;
+        in vec3 vColor;
+        out vec4 outColor;
+
+        void main() {
+            outColor = vec4(vColor, 1.0);
+        }`;
+
+        // Función para compilar shaders
+        function compileShader(gl, source, type) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error('Error al compilar el shader:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        // Compilar los shaders
+        const vertexShader = compileShader(gl, vertexShaderSource, gl.VERTEX_SHADER);
+        const fragmentShader = compileShader(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
+
+        //Crear el programa y vincular shaders
+        const program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('Error al enlazar el programa:', gl.getProgramInfoLog(program));
+        }
+        gl.useProgram(program);
+
+        //Definir las coordenadas del triángulo y los colores
+        const vertices = new Float32Array([
+            0.0,  0.87,   // Vértice 1 (arriba)
+            -0.5, -0.50,  // Vértice 2 (abajo izquierda)
+            0.5, -0.50    // Vértice 3 (abajo derecha)
+        ]);
+
+        const colors = new Float32Array([
+            1.0, 0.0, 0.0,   // Rojo en el vértice 1
+            0.0, 1.0, 0.0,   // Verde en el vértice 2
+            0.0, 0.0, 1.0    // Azul en el vértice 3
+        ]);
+
+        //Crear un buffer para los vértices
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+        // Paso 7: Vincular el buffer de vértices con los atributos del shader
+        const aPosition = gl.getAttribLocation(program, 'aPosition');
+        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aPosition);
+
+        // Paso 8: Crear un buffer para los colores
+        const colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+
+        // Vincular el buffer de colores con los atributos del shader
+        const aColor = gl.getAttribLocation(program, 'aColor');
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aColor);
+
+        // Paso 9: Configurar el fondo oscuro (hexadecimal #1b1e2b)
+        gl.clearColor(0.106, 0.118, 0.169, 1.0);  // Fondo oscuro, pero no negro
+
+        // Paso 10: Dibujar el triángulo
+        function drawScene() {
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.drawArrays(gl.TRIANGLES, 0, 3);
+        }
+
+        // Llamar al ciclo de renderizado
+        drawScene();
+    </script>
+</body>
+</html>
