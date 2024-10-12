@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.10)
+project(OpenGLProject)
+
+# Especificar el estándar de C++
+set(CMAKE_CXX_STANDARD 17)
+
+# Incluir el archivo toolchain de vcpkg
+set(CMAKE_TOOLCHAIN_FILE "C:/Users/Henry/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
+# Definir manualmente el directorio de glfw3 y glad
+set(glfw3_DIR "C:/Users/Henry/vcpkg/installed/x64-windows/share/glfw3")
+set(glad_DIR "C:/Users/Henry/vcpkg/installed/x64-windows/share/glad")
+
+# Buscar GLFW y GLAD
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+
+# Agregar el archivo fuente
+add_executable(OpenGLProject triangulo.cpp)
+
+# Enlazar las bibliotecas
+target_link_libraries(OpenGLProject PRIVATE glfw glad::glad)
