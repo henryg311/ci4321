@@ -1,4 +1,5 @@
 # Proyecto Triángulo Equilátero
+## Henry Galuè 14-10373
 
 Este proyecto, realizado en Windows, contiene tres implementaciones de un triángulo equilátero con colores en sus vértices (rojo, verde y azul) y un fondo oscuro. Estas, están divididas en las siguientes tecnologías:
 
