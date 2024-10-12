@@ -39,10 +39,11 @@ Esta implementación utiliza **OpenGL** y **GLFW** para renderizar un triángulo
 
     #### mkdir build
     #### cd build
-    #### cmake ..
+    #### cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/Users/Henry/vcpkg/scripts/buildsystems/vcpkg.cmake 
+    (Ya que tengo instalada la carpeta vcpkg en la ruta C:/Users/Henry/vcpkg/scripts/buildsystems/vcpkg.cmake)
     #### cmake --build .
     #### cd debug
-    #### OpenGLProject
+    #### OpenGLProject.exe
 
 
 #### Archivos relevantes
